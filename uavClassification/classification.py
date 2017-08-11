@@ -70,7 +70,7 @@ def MeanShiftSmoothing(inData, outSmooth, outPosition, spatialr = 16, ranger = 1
 
     if outnp:
 	app.Execute()
-	appOutput = app.GetImageAsNumpyArray("fout")
+	appOutput = app.GetImageAsNumpyArray("out")
 	appPosition = app.GetImageAsNumpyArray("foutpos")
         return appOutput
     else:
@@ -175,7 +175,7 @@ def colorMapping(inData, outData, method = "optimal", innp = False, outnp = Fals
     ----
     - add other parameters documented
     """
-    app = otbApplication.Registry.CreateApplication("app")
+    app = otbApplication.Registry.CreateApplication("ColorMapping")
 
     if innp:
         app.SetImageFromNumpyArray("in", inData)
