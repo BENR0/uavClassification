@@ -6,7 +6,9 @@ import otbApplication
 
 # TODO
 #- add logging and error catching to functions
+#- add checks for input image size and proper warnings and/or dependent processing flows
 #- add hints for incompatible parameter choices
+#- add unit tests with nose
 
 ##################
 # STRUCTURE
@@ -19,8 +21,6 @@ import otbApplication
 #- k-means classification with scipy
 
 logger = logging.getLogger(__name__)
-
-
 
 
 ######################
@@ -191,5 +191,6 @@ def colorMapping(inData, outData, method = "optimal", innp = False, outnp = Fals
     else:
 	app.SetParameterString("out", outData)
 	app.ExecuteAndWriteOutput()
+
 
 
