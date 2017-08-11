@@ -23,9 +23,6 @@ import otbApplication
 logger = logging.getLogger(__name__)
 
 
-#numpy get vector as array
-#.GetVectorImageAsNumpyArray("out", "float")
-
 ######################
 # MEAN SHIFT FILTERING
 ######################
@@ -73,8 +70,8 @@ def MeanShiftSmoothing(inData, outSmooth, outPosition, spatialr = 16, ranger = 1
 
     if outnp:
 	app.Execute()
-	appOutput = app.GetImageAsNumpyArray("fout")
-	appPosition = app.GetImageAsNumpyArray("foutpos")
+	appOutput = app.GetVectorImageAsNumpyArray("fout", "float")
+	appPosition = app.GetVectorImageAsNumpyArray("foutpos")
         return appOutput
     else:
 	app.SetParameterString("fout", outSmooth)
@@ -195,30 +192,5 @@ def colorMapping(inData, outData, method = "optimal", innp = False, outnp = Fals
 	app.SetParameterString("out", outData)
 	app.ExecuteAndWriteOutput()
 
-
- # def segmentStats(inData):
-    # """Calculate statistical moments for every segment
-
-    # Parameters
-    # ----------
-    # inData: numpy array
-        # Array with segments
-
-
-    # Return
-    # ------
-
-    # """
-    # segmentIds = np.unique(inData)
-
-
-
-    # return
-
-
-# def classify():
-
-
-    # return
 
 
