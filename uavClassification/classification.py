@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+import sys
 import logging
 import numpy as np
+import rasterio as rio
 import otbApplication
+from sklearn import cluster
 # from sys import argv
 
 # TODO
@@ -9,18 +12,13 @@ import otbApplication
 #- add checks for input image size and proper warnings and/or dependent processing flows
 #- add hints for incompatible parameter choices
 #- add unit tests with nose
+#- put functions in class
 
-##################
-# STRUCTURE
-#################
-#- wrapper functions for otb
-#  - smoothing
-#  - mean shift segmentation
-#- getting values from raster based on segmentation
-#- calculate statistics for values
-#- k-means classification with scipy
+# Known Bugs
+# - input and output to/from OTB as numpy array does not work in all cases
 
-logger = logging.getLogger(__name__)
+
+# logger = logging.getLogger(__name__)
 
 
 ######################
@@ -144,7 +142,6 @@ def MeanShiftSegmentation(inData, outData, outMode = "raster", segFilter = "mean
 ######################
 # COLOR LABEL SEGMENTATION
 ######################
-outColorLabel = "colorlabel.tif"
 def colorMapping(inData, outData, method = "optimal", innp = False, outnp = False):
     """Wrapper for otb colorlabel application. For more detailed Description of Parameters
     see OTB Cookbook documentation.
@@ -191,6 +188,152 @@ def colorMapping(inData, outData, method = "optimal", innp = False, outnp = Fals
     else:
 	app.SetParameterString("out", outData)
 	app.ExecuteAndWriteOutput()
+
+
+def segmentStats(inSegments, inImg):
+    """Calculate statistics for segments
+
+    Parameters
+    ----------
+    inSegments: numpy array
+    	N-dimensional numpy array with segments computed for example with MeanShiftSegmentation function
+    inImg: numpy array
+        Image with spectral data of dimensions [bands,xextent,yextent]
+
+    Return
+    ------
+    return: list with segment ids, 2D numpy array with stats of each segment per row
+
+    TODO
+    ----
+    """
+    segIds = np.unique(inSegments)
+    nbands = inImg.shape[0]
+    bandStats = []
+    segStats = np.zeros((len(segIds),6 * nbands))
+    segStatsId = []
+
+    numSeg = 0
+
+    for Id in segIds:
+        pixels = inImg[inSegments == Id]
+        npixels, nbands = pixels.shape
+        #calculate stats for each band
+        for band in range(nbands):
+            tmpstats = scipy.stats.describe(pixels[:,band])
+            stats = list(tmpstats.minmax) + list(tmpstats)[2:]
+            if npixels == 1:
+                #stats.describe sets variance to NaN
+                stats[3] = 0.0
+            bandStats += stats
+        segStats[numSeg] = bandStats
+        segStatsId.append(Id)
+
+        numSeg += 1
+
+        return segStatsId, segStats
+
+
+def segmentClustering(inData, nclusters, inSegments, segIds):
+    """Wrapper for sklearn.cluster.kmeans clustering algorithm
+
+    Parameters
+    ----------
+    inData: numpy array
+    	Data to be clustered. One observation per row
+    nclusters: int
+        Number of clusters to be generated
+    inSegments: numpy array
+        segmented image
+    segIds: list
+        Ids of segments as returned by segmentStats function
+
+
+    Return
+    ------
+    return: numpy array
+        Classes assigned to each segment of input image
+
+    TODO
+    ----
+    - add further arguments from sklearn.cluster.kmeans
+    """
+    kmeans = cluster.KMeans(n_clusters = nclusters)
+    kmeans.fit(inData)
+
+    for segId, label in zip(segIds, kmeans.labels):
+        inSegments[inSegments == segId] = label
+
+    return inSegments
+
+
+def writeRaster(fName, inData, rioTemplate = None):
+    """write numpy array to GTiff raster file with rasterio
+
+    Parameters
+    ----------
+    fName: string
+        Filepath
+    inData: numpy array
+    	Data to be written
+    rioTemplate: rasterio object
+        Object genereated from rasterio.open()
+
+    Return
+    ------
+    return: 
+
+    TODO
+    ----
+    - add support for other Formats than GTiff
+    - to set profile values when not using template
+    """
+    nbands, xdim, ydim = inData.shape[0]
+
+    if rioTemplate is not None:
+        profile = rioTemplate.profile
+        #check dimensions and number of bands of inData compared to template
+        if nbands != profile["count"]:
+            profile.update(count = nbands)
+        if (xdim != rioTemplate.shape[0]) or (ydim != rioTemplate.shape[1]):
+            sys.exit("The dimensions of the data to be written and the template do not match!\nData was not written.")
+    else:
+        profile = rio.profiles.DefaultGTiffProfile()
+        profile.update(count = nbands, width = xdim, height = ydim )
+
+
+    with rio.open(fName, "w", **profile) as nds:
+        for band in range(nbands):
+            nds.write(inData[band,:,:].astype(rio.uint8), band + 1)
+            
+
+def readRaster(fName, dtype = np.uint8):
+    """Read raster file using rasterio
+
+    Parameters
+    ----------
+    fName: string
+        Filepath
+    dytpe: numpy dtype. Default np.uint8
+        Datatype of the array to which data is read
+
+    Return
+    ------
+    return: numpy array, rasterio dataset profile
+
+    TODO
+    ----
+    """
+    with rio.open(fName) as ds:
+        profile = ds.profile
+        outData = ds.read().astype(dtype)
+
+    return outData, profile
+
+
+    
+
+
 
 
 
