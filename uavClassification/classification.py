@@ -3,6 +3,7 @@ import sys
 import logging
 import numpy as np
 import scipy
+from skimage.exposure import rescale_intensity
 import rasterio as rio
 import otbApplication
 from sklearn import cluster
@@ -268,6 +269,30 @@ def segmentClustering(inData, nclusters, inSegments, segIds):
         inSegments[0, inSegments[0,:,:] == segId] = label
 
     return inSegments
+
+
+def stretchImage(inData):
+    """Stretch histogram of array to value range of uint8 using skimage.rescale_intensity
+
+    Parameters
+    ----------
+    inData: numpy array
+        Dimensions [band,xdim,ydim]
+
+    Return
+    ------
+    return: numpy array
+
+    TODO
+    ----
+    """
+    nbands = inData.shape[0]
+    outData = inData.copy()
+
+    for b in range(nbands):
+        outData[b,:,:] = rescale_intensity(inData[b,:,:], out_range = (0,255))
+        
+    return outData
 
 
 def writeRaster(fName, inData, rioTemplate = None):
