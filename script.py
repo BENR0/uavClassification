@@ -30,16 +30,13 @@ segmented = "../segmented.tif"
 segmentImg, segprofile = readRaster(segmented)
 RGBImg, RGBprofile = readRaster(inputImg)
 
-print(RGBprofile["count"])
-
 print("calculate stats")
 ids, stats = segmentStats(segmentImg, RGBImg)
 
-print(ids)
-print(stats)
+print("main script")
 
 print("classify")
-classified = segmentClustering(stats, 4, segmentImg, ids)
+classified = segmentClustering(stats, 5, segmentImg, ids)
 
 print("write raster")
 writeRaster("../classified.tif", classified, segprofile)

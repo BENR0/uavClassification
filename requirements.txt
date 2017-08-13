@@ -1,5 +1,11 @@
-numpy
-scipy
-scikit-learn[alldeps]
-rasterio
-tqdm
+affine==2.1.0
+click==6.7
+click-plugins==1.0.3
+cligj==0.4.0
+enum34==1.1.6
+numpy==1.13.1
+pyparsing==2.2.0
+rasterio==0.36.0
+scikit-learn==0.19.0
+scipy==0.19.1
+snuggs==1.4.1

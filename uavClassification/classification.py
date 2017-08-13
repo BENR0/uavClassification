@@ -208,32 +208,33 @@ def segmentStats(inSegments, inImg):
     TODO
     ----
     """
-    segIds = np.unique(inSegments)
+    segIds = np.unique(inSegments[0,:,:])
     nbands = inImg.shape[0] - 1 #due to alpha channel
-    bandStats = []
     segStats = np.zeros((len(segIds),6 * nbands))
     segStatsId = []
 
     numSeg = 0
 
-    for Id in segIds:
-        pixels = inImg[:,inSegments[0] == Id]
+    for Id in segIds.tolist():
+        pixels = inImg[:,inSegments[0,:,:] == Id]
         npixels, tmpnbands = pixels.shape
-        #calculate stats for each band
+        # calculate stats for each band
+        bandStats = []
         for band in range(nbands):
             tmpstats = scipy.stats.describe(pixels[band,:])
             #stats = list(tmpstats.minmax) + list(tmpstats)[2:]
-            stats = list(tmpstats[1]) + list(tmpstats)[2:]
+            stats = list(tmpstats.minmax) + list(tmpstats)[2:]
             if npixels == 1:
                 #stats.describe sets variance to NaN
                 stats[3] = 0.0
             bandStats += stats
+
         segStats[numSeg] = bandStats
         segStatsId.append(Id)
 
         numSeg += 1
 
-        return segStatsId, segStats
+    return segStatsId, segStats
 
 
 def segmentClustering(inData, nclusters, inSegments, segIds):
@@ -263,12 +264,8 @@ def segmentClustering(inData, nclusters, inSegments, segIds):
     kmeans = cluster.KMeans(n_clusters = nclusters)
     kmeans.fit(inData)
 
-    print(len(segIds))
-    print(segIds)
-    print(len(kmeans.labels_))
-    print(kmeans.labels_)
     for segId, label in zip(segIds, kmeans.labels_):
-        inSegments[0, inSegments == segId] = label
+        inSegments[0, inSegments[0,:,:] == segId] = label
 
     return inSegments
 
