@@ -2,6 +2,7 @@
 import sys
 import logging
 import numpy as np
+import scipy
 import rasterio as rio
 import otbApplication
 from sklearn import cluster
@@ -196,9 +197,9 @@ def segmentStats(inSegments, inImg):
     Parameters
     ----------
     inSegments: numpy array
-    	N-dimensional numpy array with segments computed for example with MeanShiftSegmentation function
+    	numpy array with dimensions [bands,xdim,ydim] with segments computed for example with MeanShiftSegmentation function
     inImg: numpy array
-        Image with spectral data of dimensions [bands,xextent,yextent]
+        Image with spectral data of dimensions [bands,xdim,ydim]
 
     Return
     ------
@@ -208,7 +209,7 @@ def segmentStats(inSegments, inImg):
     ----
     """
     segIds = np.unique(inSegments)
-    nbands = inImg.shape[0]
+    nbands = inImg.shape[0] - 1 #due to alpha channel
     bandStats = []
     segStats = np.zeros((len(segIds),6 * nbands))
     segStatsId = []
@@ -216,12 +217,13 @@ def segmentStats(inSegments, inImg):
     numSeg = 0
 
     for Id in segIds:
-        pixels = inImg[inSegments == Id]
-        npixels, nbands = pixels.shape
+        pixels = inImg[:,inSegments[0] == Id]
+        npixels, tmpnbands = pixels.shape
         #calculate stats for each band
         for band in range(nbands):
-            tmpstats = scipy.stats.describe(pixels[:,band])
-            stats = list(tmpstats.minmax) + list(tmpstats)[2:]
+            tmpstats = scipy.stats.describe(pixels[band,:])
+            #stats = list(tmpstats.minmax) + list(tmpstats)[2:]
+            stats = list(tmpstats[1]) + list(tmpstats)[2:]
             if npixels == 1:
                 #stats.describe sets variance to NaN
                 stats[3] = 0.0
@@ -261,8 +263,12 @@ def segmentClustering(inData, nclusters, inSegments, segIds):
     kmeans = cluster.KMeans(n_clusters = nclusters)
     kmeans.fit(inData)
 
-    for segId, label in zip(segIds, kmeans.labels):
-        inSegments[inSegments == segId] = label
+    print(len(segIds))
+    print(segIds)
+    print(len(kmeans.labels_))
+    print(kmeans.labels_)
+    for segId, label in zip(segIds, kmeans.labels_):
+        inSegments[0, inSegments == segId] = label
 
     return inSegments
 
@@ -276,8 +282,8 @@ def writeRaster(fName, inData, rioTemplate = None):
         Filepath
     inData: numpy array
     	Data to be written
-    rioTemplate: rasterio object
-        Object genereated from rasterio.open()
+    rioTemplate: rasterio profile dictionary
+        Dictionary genereated from rasterio.open().profile
 
     Return
     ------
@@ -288,18 +294,21 @@ def writeRaster(fName, inData, rioTemplate = None):
     - add support for other Formats than GTiff
     - to set profile values when not using template
     """
-    nbands, xdim, ydim = inData.shape[0]
+    nbands, ydim, xdim = inData.shape
 
     if rioTemplate is not None:
-        profile = rioTemplate.profile
+        profile = rioTemplate
         #check dimensions and number of bands of inData compared to template
         if nbands != profile["count"]:
             profile.update(count = nbands)
-        if (xdim != rioTemplate.shape[0]) or (ydim != rioTemplate.shape[1]):
+        if str(inData.dtype) != profile["dtype"]:
+            profile.update(dtype = str(inData.dtype))
+        if (xdim != rioTemplate["width"]) or (ydim != rioTemplate["height"]):
             sys.exit("The dimensions of the data to be written and the template do not match!\nData was not written.")
     else:
         profile = rio.profiles.DefaultGTiffProfile()
         profile.update(count = nbands, width = xdim, height = ydim )
+        
 
 
     with rio.open(fName, "w", **profile) as nds:
