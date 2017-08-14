@@ -12,6 +12,7 @@ from sklearn import cluster
 # TODO
 #- add logging and error catching to functions
 #- add checks for input image size and proper warnings and/or dependent processing flows
+#- add support in segmentStats and classification for use of vector files as input for segmented image
 #- add hints for incompatible parameter choices
 #- add unit tests with nose
 #- put functions in class
@@ -192,7 +193,7 @@ def colorMapping(inData, outData, method = "optimal", innp = False, outnp = Fals
 	app.ExecuteAndWriteOutput()
 
 
-def segmentStats(inSegments, inImg):
+def segmentStats(inSegments, inImg, alphaChannel = True):
     """Calculate statistics for segments
 
     Parameters
@@ -201,6 +202,8 @@ def segmentStats(inSegments, inImg):
     	numpy array with dimensions [bands,xdim,ydim] with segments computed for example with MeanShiftSegmentation function
     inImg: numpy array
         Image with spectral data of dimensions [bands,xdim,ydim]
+    alphaChannel: boolean, default True
+        When True last band in inImg is alpha channel
 
     Return
     ------
@@ -210,7 +213,11 @@ def segmentStats(inSegments, inImg):
     ----
     """
     segIds = np.unique(inSegments[0,:,:])
-    nbands = inImg.shape[0] - 1 #due to alpha channel
+    if alphaChannel:
+        nbands = inImg.shape[0] - 1 #due to alpha channel
+    else:
+        nbands = inImg.shape[0]
+
     segStats = np.zeros((len(segIds),6 * nbands))
     segStatsId = []
 
