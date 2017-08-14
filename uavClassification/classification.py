@@ -27,7 +27,7 @@ from sklearn import cluster
 ######################
 # MEAN SHIFT FILTERING
 ######################
-def MeanShiftSmoothing(inData, outSmooth, outPosition, spatialr = 16, ranger = 16, thres = 0.1, maxiter = 100, innp = False, outnp = False):
+def MeanShiftSmoothing(inData, outSmooth, outPosition, spatialr = 12, ranger = 25, thres = 0.1, maxiter = 100, innp = False, outnp = False):
     """Wrapper for otbMeanShiftSmoothing application. For more detailed Description of Parameters
     see OTB Cookbook documentation.
 
@@ -83,7 +83,8 @@ def MeanShiftSmoothing(inData, outSmooth, outPosition, spatialr = 16, ranger = 1
 ######################
 # MEAN SHIFT SEGMENTATION
 ######################
-def MeanShiftSegmentation(inData, outData, outMode = "raster", segFilter = "meanshift", innp = False, outnp = False):
+def MeanShiftSegmentation(inData, outData, outMode = "raster", segFilter = "meanshift",
+        spatialr = 5, ranger = 15.0, thres = 0.1, maxiter = 100, minsize = 100, innp = False, outnp = False):
     """Wrapper for otb Segmentation application. For more detailed Description of Parameters
     see OTB Cookbook documentation.
 
@@ -105,6 +106,8 @@ def MeanShiftSegmentation(inData, outData, outMode = "raster", segFilter = "mean
 	Threshold
     maxiter: int
 	Maximum number of iterations
+    minsize: int
+        Minimum size of segments in pixel
     innp: boolean
 	If set to True input must be numpy array
     outnp: boolean
@@ -118,6 +121,10 @@ def MeanShiftSegmentation(inData, outData, outMode = "raster", segFilter = "mean
     TODO
     ----
     - add other parameters documented in OTB cookbook
+    - Default values:
+    https://docs.qgis.org/2.8/en/docs/user_manual/processing_algs/otb/segmentation.html#segmentation-meanshift
+    - Parameter:
+    documentation:https://www.orfeo-toolbox.org/CookBook/Applications/app_Segmentation.html
     """
     app = otbApplication.Registry.CreateApplication("Segmentation")
 
@@ -128,6 +135,15 @@ def MeanShiftSegmentation(inData, outData, outMode = "raster", segFilter = "mean
 
     app.SetParameterString("mode", outMode)
     app.SetParameterString("filter", segFilter)
+
+    paramPrefix = "filter." + segFilter.lower()
+    paramSpatialr = paramPrefix + ".spatialr"
+    paramRanger = paramPrefix + ".ranger"
+    paramMinsize = paramPrefix + ".minsize"
+
+    app.SetParameterInt(paramSpatialr, spatialr)
+    app.SetParameterFloat(paramRanger, ranger)
+    app.SetParameterInt(paramMinsize, minsize)
 
     if outMode == "vector":
         app.SetParameterString("mode.vector.out", outData)
