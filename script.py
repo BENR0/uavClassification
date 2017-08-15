@@ -1,25 +1,20 @@
 # -*- coding: utf-8 -*-
 from uavClassification import *
 
-inputImg = "../test_image_cubic_resample.tif"
+#fname = "test_image_cubic_resample"
+fname = "orthofoto_small_cubic_resample"
+inputImg = "../input/" + fname + ".tif"
+stretchedImg = "../input/" + fname + "_stretched.tif"
 
-#MeanShiftSmoothing(inputImg, "../smooth_out.tif", "../smooth_position.tif")
-
-#print("segmentation")
-#MeanShiftSegmentation("../smooth_out.tif", "../segmented.tif")
-
-#print("colormapping")
-#colorMapping("../segmented.tif", "../labeled.tif")
+RGBImg, RGBprofile = readRaster(inputImg)
+stretched = stretchHistogram(RGBImg)
+writeRaster(stretchedImg, stretched, RGBprofile)
 
 
-#print("numpy")
-#smoothed = MeanShiftSmoothing(inputImg, None, None, outnp = True)
+MeanShiftSmoothing(stretchedImg, "../smooth_out.tif", "../smooth_position.tif")
 
-#print("segmentation")
-#segmented = MeanShiftSegmentation(smoothed, None,  innp = True, outnp = True)
-
-#print("colormapping")
-#colorMapping(segmented, "../labeled_np.tif", innp = True)
+print("segmentation")
+MeanShiftSegmentation("../smooth_out.tif", "../segmented.tif", spatialr = 16, ranger = 10)
 
 
 #######################

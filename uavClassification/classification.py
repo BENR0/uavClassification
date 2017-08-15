@@ -294,7 +294,7 @@ def segmentClustering(inData, nclusters, inSegments, segIds):
     return inSegments
 
 
-def stretchImage(inData):
+def stretchHistogram(inData):
     """Stretch histogram of array to value range of uint8 using skimage.rescale_intensity
 
     Parameters
