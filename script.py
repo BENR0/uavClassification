@@ -11,19 +11,19 @@ stretched = stretchHistogram(RGBImg)
 writeRaster(stretchedImg, stretched, RGBprofile)
 
 
-MeanShiftSmoothing(stretchedImg, "../smooth_out.tif", "../smooth_position.tif")
+MeanShiftSmoothing(stretchedImg, "../output/smooth/smooth_out.tif", "../output/smooth_position.tif")
 
 print("segmentation")
-MeanShiftSegmentation("../smooth_out.tif", "../segmented.tif", spatialr = 16, ranger = 10)
+MeanShiftSegmentation("../output/smooth/smooth_out.tif", "../output/segmented/segmented.tif", spatialr = 16, ranger = 10)
 
 
 #######################
 #testing classification
 #######################
 
-segmented = "../segmented.tif"
+segmented = "../output/segmented/segmented.tif"
 segmentImg, segprofile = readRaster(segmented)
-RGBImg, RGBprofile = readRaster(inputImg)
+RGBImg, RGBprofile = readRaster(stretchedImg)
 
 print("calculate stats")
 ids, stats = segmentStats(segmentImg, RGBImg)
@@ -34,4 +34,4 @@ print("classify")
 classified = segmentClustering(stats, 5, segmentImg, ids)
 
 print("write raster")
-writeRaster("../classified.tif", classified, segprofile)
+writeRaster("../output/classified/classified.tif", classified, segprofile)

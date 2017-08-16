@@ -10,7 +10,7 @@ radio = range(2, 18, 2)
 spatial = range(2, 18, 2)
 combs = itertools.product(spatial, radio)
 
-smoothout = "../output/smooth/smothed.tif" # "../smooth/smooth_" + run
+smoothout = "../output/smooth/smoothed.tif" # "../smooth/smooth_" + run
 MeanShiftSmoothing(inputImg, smoothout, "../output/smooth_position.tif")
 
 for a,b in tqdm(list(combs)):
