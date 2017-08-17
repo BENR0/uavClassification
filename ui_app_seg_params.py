@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_app_seg_params.ui'
 #
-# Created: Wed Aug 16 22:56:34 2017
+# Created: Thu Aug 17 10:41:54 2017
 #      by: PyQt5 UI code generator 5.3.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
-        self.segResult = ImageView(self.centralwidget)
+        self.segResult = GraphicsView(self.centralwidget)
         self.segResult.setEnabled(True)
         self.segResult.setMinimumSize(QtCore.QSize(600, 0))
         self.segResult.setObjectName("segResult")
@@ -77,4 +77,4 @@ class Ui_MainWindow(object):
         self.Numberofclasses.setText(_translate("MainWindow", "Number of classes"))
         self.slider_classes.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>test</p></body></html>"))
 
-from pyqtgraph import ImageView
+from pyqtgraph import GraphicsView

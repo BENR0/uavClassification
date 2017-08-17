@@ -15,7 +15,12 @@ class segmentationParams(QtGui.QMainWindow, ui_app_seg_params.Ui_MainWindow):
         self.slider_spatialr.valueChanged.connect(self.runSegment)
         self.slider_ranger.valueChanged.connect(self.runSegment)
         self.slider_classes.valueChanged.connect(self.runClassification)
-        #self.segResult.addItem(pyqtgraph.ImageItem())
+        self.imageItem = pyqtgraph.ImageItem()
+        self.view = pyqtgraph.ViewBox()
+        self.view.addItem(self.imageItem)
+        #segResult is of class pyqtgraph.GraphicsView
+        self.segResult.setCentralItem(self.view)
+        
 
 
     def runSegment(self):
@@ -38,7 +43,7 @@ class segmentationParams(QtGui.QMainWindow, ui_app_seg_params.Ui_MainWindow):
         classified = segmentClustering(stats, slClasses, segmentedImg, ids)
 
 
-        self.segResult.setImage(classified)
+        self.imageItem.setImage(classified[0])
 
 
     def runClassification(self):
@@ -55,7 +60,7 @@ class segmentationParams(QtGui.QMainWindow, ui_app_seg_params.Ui_MainWindow):
         classified = segmentClustering(stats, slClasses, segmentedImg, ids)
 
 
-        self.segResult.setImage(classified)
+        self.imageItem.setImage(classified[0])
 
 
 if __name__ == "__main__":
