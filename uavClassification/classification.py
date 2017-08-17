@@ -351,9 +351,15 @@ def writeRaster(fName, inData, rioTemplate = None):
         if (xdim != rioTemplate["width"]) or (ydim != rioTemplate["height"]):
             sys.exit("The dimensions of the data to be written and the template do not match!\nData was not written.")
     else:
-        profile = rio.profiles.DefaultGTiffProfile()
-        profile.update(count = nbands, width = xdim, height = ydim )
-        
+        profile = {
+        "driver": "GTiff",
+        "interleave": "pixel",
+        "tiled": False,
+        "nodata": 0,
+        "dtype": rio.uint8,
+        "count": nbands,
+        "width": xdim,
+        "height": ydim}
 
 
     with rio.open(fName, "w", **profile) as nds:
