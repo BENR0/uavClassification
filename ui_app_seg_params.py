@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_app_seg_params.ui'
 #
-# Created: Thu Aug 17 11:41:13 2017
+# Created: Thu Aug 17 13:16:45 2017
 #      by: PyQt5 UI code generator 5.3.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,20 +12,38 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(782, 664)
+        MainWindow.resize(919, 664)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.centralwidget)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         self.segResult = GraphicsView(self.centralwidget)
         self.segResult.setEnabled(True)
         self.segResult.setMinimumSize(QtCore.QSize(600, 0))
         self.segResult.setObjectName("segResult")
-        self.horizontalLayout_4.addWidget(self.segResult)
+        self.horizontalLayout_6.addWidget(self.segResult)
         self.verticalLayout_4 = QtWidgets.QVBoxLayout()
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.RGBimgpathButton = QtWidgets.QPushButton(self.centralwidget)
+        self.RGBimgpathButton.setObjectName("RGBimgpathButton")
+        self.horizontalLayout_5.addWidget(self.RGBimgpathButton)
+        self.RGBimgpathlabel = QtWidgets.QLabel(self.centralwidget)
+        self.RGBimgpathlabel.setObjectName("RGBimgpathlabel")
+        self.horizontalLayout_5.addWidget(self.RGBimgpathlabel)
+        self.verticalLayout.addLayout(self.horizontalLayout_5)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.smoothedpathButton = QtWidgets.QPushButton(self.centralwidget)
+        self.smoothedpathButton.setObjectName("smoothedpathButton")
+        self.horizontalLayout_4.addWidget(self.smoothedpathButton)
+        self.smoothedpathlabel = QtWidgets.QLabel(self.centralwidget)
+        self.smoothedpathlabel.setObjectName("smoothedpathlabel")
+        self.horizontalLayout_4.addWidget(self.smoothedpathlabel)
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
         self.spatialr = QtWidgets.QLabel(self.centralwidget)
         self.spatialr.setObjectName("spatialr")
         self.verticalLayout.addWidget(self.spatialr)
@@ -92,10 +110,10 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addLayout(self.verticalLayout_3)
         spacerItem = QtWidgets.QSpacerItem(20, 594, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem)
-        self.horizontalLayout_4.addLayout(self.verticalLayout_4)
+        self.horizontalLayout_6.addLayout(self.verticalLayout_4)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 782, 27))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 919, 27))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -114,6 +132,10 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.RGBimgpathButton.setText(_translate("MainWindow", "RGB img"))
+        self.RGBimgpathlabel.setText(_translate("MainWindow", "Select RGB image"))
+        self.smoothedpathButton.setText(_translate("MainWindow", "Smoothed Img"))
+        self.smoothedpathlabel.setText(_translate("MainWindow", "Select smoothed image"))
         self.spatialr.setText(_translate("MainWindow", "Spatialr"))
         self.ranger.setText(_translate("MainWindow", "Ranger"))
         self.Numberofclasses.setText(_translate("MainWindow", "Number of classes"))

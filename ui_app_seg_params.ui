@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>782</width>
+    <width>919</width>
     <height>664</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <layout class="QHBoxLayout" name="horizontalLayout_6">
     <item>
      <widget class="GraphicsView" name="segResult">
       <property name="enabled">
@@ -32,6 +32,42 @@
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QPushButton" name="RGBimgpathButton">
+            <property name="text">
+             <string>RGB img</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="RGBimgpathlabel">
+            <property name="text">
+             <string>Select RGB image</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QPushButton" name="smoothedpathButton">
+            <property name="text">
+             <string>Smoothed Img</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="smoothedpathlabel">
+            <property name="text">
+             <string>Select smoothed image</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
         <item>
          <widget class="QLabel" name="spatialr">
           <property name="text">
@@ -187,7 +223,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>782</width>
+     <width>919</width>
      <height>27</height>
     </rect>
    </property>
@@ -211,11 +247,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>700</x>
-     <y>72</y>
+     <y>142</y>
     </hint>
     <hint type="destinationlabel">
-     <x>735</x>
-     <y>73</y>
+     <x>919</x>
+     <y>143</y>
     </hint>
    </hints>
   </connection>
@@ -227,11 +263,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>698</x>
-     <y>129</y>
+     <y>199</y>
     </hint>
     <hint type="destinationlabel">
-     <x>744</x>
-     <y>137</y>
+     <x>928</x>
+     <y>207</y>
     </hint>
    </hints>
   </connection>
@@ -243,11 +279,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>665</x>
-     <y>188</y>
+     <y>258</y>
     </hint>
     <hint type="destinationlabel">
-     <x>723</x>
-     <y>192</y>
+     <x>907</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -258,12 +294,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>750</x>
-     <y>84</y>
+     <x>934</x>
+     <y>154</y>
     </hint>
     <hint type="destinationlabel">
      <x>690</x>
-     <y>75</y>
+     <y>145</y>
     </hint>
    </hints>
   </connection>
@@ -274,12 +310,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>748</x>
-     <y>132</y>
+     <x>932</x>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
      <x>701</x>
-     <y>127</y>
+     <y>197</y>
     </hint>
    </hints>
   </connection>
@@ -290,12 +326,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>736</x>
-     <y>183</y>
+     <x>920</x>
+     <y>253</y>
     </hint>
     <hint type="destinationlabel">
      <x>692</x>
-     <y>188</y>
+     <y>258</y>
     </hint>
    </hints>
   </connection>

@@ -20,23 +20,37 @@ class segmentationParams(QtGui.QMainWindow, ui_app_seg_params.Ui_MainWindow):
         self.view.addItem(self.imageItem)
         #segResult is of class pyqtgraph.GraphicsView
         self.segResult.setCentralItem(self.view)
+
+        #get file pathes with buttons
+        self.RGBimgpathButton.clicked.connect(self.getFileRGB)
+        self.smoothedpathButton.clicked.connect(self.getFilesmoothed)
+        self.segmentedout = "../output/segmented/app_segmented.tif"
+
+        self.RGBimgpath = "../input/test_image_cubic_resample.tif" 
+        self.smoothedpath = ""
+        #smoothed = "../output/smooth/smoothed.tif"
         
 
+    def getFileRGB(self):
+        self.RGBimgpath = str(QtWidgets.QFileDialog.getOpenFileName(self, "Open RGB file", "~")[0])
+        self.RGBimgpathlabel.setText(self.RGBimgpath)
+
+    def getFilesmoothed(self):
+        self.smoothedpath = str(QtWidgets.QFileDialog.getOpenFileName(self, "Open smoothed file", "~")[0])
+        self.smoothedpathlabel.setText(self.smoothedpath)
 
     def runSegment(self):
         slSpatialr = self.slider_spatialr.value()
         slRanger = self.slider_ranger.value()
         slClasses = self.slider_classes.value()
 
-        RGBinput = "../input/test_image_cubic_resample.tif" 
-        segmentedout = "../output/segmented/app_segmented.tif"
-        smoothed = "../output/smooth/smoothed.tif"
+        mssin = self.smoothedpath
+        mssout = self.segmentedout
 
+        MeanShiftSegmentation(mssin, mssout, spatialr = slSpatialr, ranger = slRanger)
 
-        MeanShiftSegmentation(smoothed, segmentedout, spatialr = slSpatialr, ranger = slRanger)
-
-        segmentedImg, segprofile = readRaster(segmentedout)
-        RGBImg, rgbgrofile = readRaster(RGBinput)
+        segmentedImg, segprofile = readRaster(self.segmentedout)
+        RGBImg, rgbgrofile = readRaster(self.RGBimgpath)
 
 
         ids, stats = segmentStats(segmentedImg, RGBImg)
@@ -49,11 +63,9 @@ class segmentationParams(QtGui.QMainWindow, ui_app_seg_params.Ui_MainWindow):
     def runClassification(self):
         slClasses = self.slider_classes.value()
 
-        RGBinput = "../input/test_image_cubic_resample.tif" 
-        segmentedout = "../output/segmented/app_segmented.tif"
 
-        RGBImg, rgbgrofile = readRaster(RGBinput)
-        segmentedImg, segprofile = readRaster(segmentedout)
+        RGBImg, rgbgrofile = readRaster(self.RGBimgpath)
+        segmentedImg, segprofile = readRaster(self.segmentedout)
 
 
         ids, stats = segmentStats(segmentedImg, RGBImg)
@@ -67,5 +79,5 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     form = segmentationParams()
     form.show()
-    form.runSegment()
+    #form.runSegment()
     app.exec_()
