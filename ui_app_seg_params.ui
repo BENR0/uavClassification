@@ -202,6 +202,13 @@
        </layout>
       </item>
       <item>
+       <widget class="QPushButton" name="saveClassificationButton">
+        <property name="text">
+         <string>Save Classification as Image</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>

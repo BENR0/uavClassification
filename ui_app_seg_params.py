@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_app_seg_params.ui'
 #
-# Created: Thu Aug 17 13:16:45 2017
+# Created: Thu Aug 17 13:49:54 2017
 #      by: PyQt5 UI code generator 5.3.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -108,6 +108,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.spinBox_3)
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
         self.verticalLayout_4.addLayout(self.verticalLayout_3)
+        self.saveClassificationButton = QtWidgets.QPushButton(self.centralwidget)
+        self.saveClassificationButton.setObjectName("saveClassificationButton")
+        self.verticalLayout_4.addWidget(self.saveClassificationButton)
         spacerItem = QtWidgets.QSpacerItem(20, 594, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem)
         self.horizontalLayout_6.addLayout(self.verticalLayout_4)
@@ -140,5 +143,6 @@ class Ui_MainWindow(object):
         self.ranger.setText(_translate("MainWindow", "Ranger"))
         self.Numberofclasses.setText(_translate("MainWindow", "Number of classes"))
         self.slider_classes.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>test</p></body></html>"))
+        self.saveClassificationButton.setText(_translate("MainWindow", "Save Classification as Image"))
 
 from pyqtgraph import GraphicsView
