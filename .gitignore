@@ -99,3 +99,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#custom ignore
+data/app_segmented.tif
